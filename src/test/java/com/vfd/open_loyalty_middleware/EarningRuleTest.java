@@ -1,5 +1,7 @@
 package com.vfd.open_loyalty_middleware;
 
+import com.vfd.open_loyalty_middleware.service.EarningRuleService;
+import com.vfd.open_loyalty_middleware.service.impl.EarningRuleServiceImpl;
 import com.vfd.open_loyalty_middleware.cotroller.EarningRuleController;
 import com.vfd.open_loyalty_middleware.entity.EarningRule;
 import com.vfd.open_loyalty_middleware.enums.ActiveStatus;
@@ -12,14 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import service.EarningRuleService;
-import service.serviceImpl.EarningRuleServiceImpl;
 
 import java.time.LocalDateTime;
 
@@ -48,15 +46,15 @@ class EarningRuleTest {
         earningRule.setPoints(100);
 
         Mockito.when(earningRuleRepository.save(earningRule)).thenReturn(earningRule);
-        EarningRule newEarningRule = earningRuleServiceImpl.createRule(earningRule);
+        EarningRule newEarningRule = earningRuleServiceImpl.create(earningRule);
 
         assertThat(newEarningRule).isNotNull();
         assertThat(newEarningRule.getCustomEventName()).isEqualTo(earningRule.getCustomEventName());
     }
 
-//    @Autowired
-//    private TestRestTemplate testRestTemplate;
-    TestRestTemplate testRestTemplate = new TestRestTemplate();
+    @Autowired
+    private TestRestTemplate testRestTemplate;
+    //TestRestTemplate testRestTemplate = new TestRestTemplate();
 
     @Autowired
     private MockMvc mockMvc;
