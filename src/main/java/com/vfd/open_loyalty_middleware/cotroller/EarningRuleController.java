@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class EarningRuleController {
 
     @Autowired
-    private EarningRuleService earningRuleService;
+    private final EarningRuleService earningRuleService;
+
+    public EarningRuleController(EarningRuleService earningRuleService) {
+        this.earningRuleService = earningRuleService;
+    }
 
     @PostMapping()
     public ResponseEntity<EarningRule> createEarningRule(@RequestBody EarningRule earningRule){

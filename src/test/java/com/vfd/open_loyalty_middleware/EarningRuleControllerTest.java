@@ -1,12 +1,10 @@
 package com.vfd.open_loyalty_middleware;
 
-import com.vfd.open_loyalty_middleware.service.EarningRuleService;
-import com.vfd.open_loyalty_middleware.service.impl.EarningRuleServiceImpl;
 import com.vfd.open_loyalty_middleware.cotroller.EarningRuleController;
 import com.vfd.open_loyalty_middleware.entity.EarningRule;
 import com.vfd.open_loyalty_middleware.enums.ActiveStatus;
 import com.vfd.open_loyalty_middleware.enums.EarningRuleType;
-import com.vfd.open_loyalty_middleware.repository.EarningRuleRepository;
+import com.vfd.open_loyalty_middleware.service.EarningRuleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,35 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class EarningRuleTest {
-
-    @Mock
-    private EarningRuleRepository earningRuleRepository;
-
-    @InjectMocks
-    private EarningRuleServiceImpl earningRuleServiceImpl;
-
-    @Test
-    void shouldCreateEarningRule(){
-        var earningRule = new EarningRule();
-        earningRule.setName("Test earning rule");
-        earningRule.setDescription("Test earning rule");
-        earningRule.setActive(ActiveStatus.ACTIVE);
-        earningRule.setStartAt(LocalDateTime.now());
-        earningRule.setEndAt(earningRule.getStartAt().plusDays(30L));
-        earningRule.setType(EarningRuleType.CUSTOM_EARNING_RULE);
-        earningRule.setCustomEventName("TEST_EARNING_RULE");
-        earningRule.setPoints(100);
-
-        Mockito.when(earningRuleRepository.save(earningRule)).thenReturn(earningRule);
-        EarningRule newEarningRule = earningRuleServiceImpl.create(earningRule);
-
-        assertThat(newEarningRule).isNotNull();
-        assertThat(newEarningRule.getCustomEventName()).isEqualTo(earningRule.getCustomEventName());
-    }
+class EarningRuleControllerTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -60,7 +33,7 @@ class EarningRuleTest {
     private MockMvc mockMvc;
 
     @Mock
-    private EarningRuleService earningRuleServ;
+    private EarningRuleService earningRuleService;
 
     @InjectMocks
     private EarningRuleController earningRuleController;
@@ -99,5 +72,25 @@ class EarningRuleTest {
 //        this.mockMvc
 //                .perform(MockMvcRequestBuilders.post("/earningRule"))
 //                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void shouldCreateRuleFromController() {
+
+        EarningRule earningRule = new EarningRule();
+        earningRule.setName("Test earning rule");
+        earningRule.setDescription("Test earning rule");
+        earningRule.setActive(ActiveStatus.ACTIVE);
+        earningRule.setStartAt(LocalDateTime.now());
+        earningRule.setEndAt(earningRule.getStartAt().plusDays(30L));
+        earningRule.setType(EarningRuleType.CUSTOM_EARNING_RULE);
+        earningRule.setCustomEventName("TEST_EARNING_RULE");
+        earningRule.setPoints(100);
+
+        Mockito.when(earningRuleService.create(earningRule)).thenReturn(earningRule);
+        ResponseEntity<EarningRule> response = earningRuleController.createEarningRule(earningRule);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        //assertThat(newEarningRule.getCustomEventName()).isEqualTo(earningRule.getCustomEventName());
     }
 }
