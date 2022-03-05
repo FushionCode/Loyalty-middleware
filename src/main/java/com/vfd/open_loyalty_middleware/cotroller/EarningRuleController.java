@@ -1,8 +1,7 @@
 package com.vfd.open_loyalty_middleware.cotroller;
 
-import com.vfd.open_loyalty_middleware.service.EarningRuleService;
 import com.vfd.open_loyalty_middleware.entity.EarningRule;
-import lombok.Getter;
+import com.vfd.open_loyalty_middleware.service.EarningRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +43,8 @@ public class EarningRuleController {
         return earningRuleService.findAll();
     }
 
-    @GetMapping
-    public EarningRule findEarningRuleByCustomEventName(String customEventName) throws Exception {
+    @GetMapping("/findEarningRule")
+    public EarningRule findEarningRuleByCustomEventName(@RequestBody String customEventName) throws Exception {
         return earningRuleService.findByCustomEventName(customEventName);
     }
 }

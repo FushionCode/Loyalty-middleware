@@ -1,4 +1,4 @@
-package com.vfd.open_loyalty_middleware;
+package com.vfd.open_loyalty_middleware.controller;
 
 import com.vfd.open_loyalty_middleware.cotroller.EarningRuleController;
 import com.vfd.open_loyalty_middleware.entity.EarningRule;

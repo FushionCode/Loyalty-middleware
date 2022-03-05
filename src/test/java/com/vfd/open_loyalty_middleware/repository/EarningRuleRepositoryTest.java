@@ -1,4 +1,4 @@
-package com.vfd.open_loyalty_middleware;
+package com.vfd.open_loyalty_middleware.repository;
 
 import com.vfd.open_loyalty_middleware.entity.EarningRule;
 import com.vfd.open_loyalty_middleware.enums.ActiveStatus;
